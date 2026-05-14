@@ -1,0 +1,331 @@
+{
+  "component-definition": {
+    "uuid": "2804e4ea-4762-4c75-809f-bda30bb2d6ce",
+    "metadata": {
+      "title": "Acme Health Patient Intake API Component Definition",
+      "last-modified": "2026-05-14T00:55:04+00:00",
+      "version": "0.1.0",
+      "oscal-version": "1.1.2",
+      "props": [
+        {
+          "name": "primary-framework",
+          "value": "HIPAA Security Rule"
+        },
+        {
+          "name": "system",
+          "value": "patient-intake-api"
+        }
+      ],
+      "roles": [
+        {
+          "id": "prepared-by",
+          "title": "Prepared By"
+        }
+      ],
+      "parties": [
+        {
+          "uuid": "ba34c191-8ecc-4c3c-9cea-6e92e52b2e28",
+          "type": "organization",
+          "name": "Acme Health"
+        }
+      ],
+      "responsible-parties": [
+        {
+          "role-id": "prepared-by",
+          "party-uuids": [
+            "ba34c191-8ecc-4c3c-9cea-6e92e52b2e28"
+          ]
+        }
+      ]
+    },
+    "components": [
+      {
+        "uuid": "abb2ebfd-9a1c-462a-95dd-7ab1138fc51c",
+        "type": "software",
+        "title": "Patient Intake API",
+        "description": "The Acme Health patient intake workload and the Terraform, policy, and evidence controls wrapped around it for HIPAA Security Rule defensibility.",
+        "props": [
+          {
+            "name": "api-url",
+            "value": "https://hy7lfpmvgc.execute-api.us-east-1.amazonaws.com/intake"
+          },
+          {
+            "name": "terraform-root",
+            "value": "terraform/"
+          },
+          {
+            "name": "aws-region",
+            "value": "us-east-1"
+          }
+        ],
+        "control-implementations": [
+          {
+            "uuid": "c62efff0-0356-4e37-b990-c3cde2357ee2",
+            "source": "https://csrc.nist.gov/publications/detail/sp/800-66/rev-2/final",
+            "description": "HIPAA Security Rule implementation guidance is cited through NIST SP 800-66 Rev. 2. HIPAA section numbers are recorded as props on each implemented requirement.",
+            "implemented-requirements": [
+              {
+                "uuid": "dbe66808-6079-4b24-bae8-72781ede240e",
+                "control-id": "hipaa-164-312-a-2-iv",
+                "description": "Encryption and decryption of electronic PHI at rest using a customer-managed key.",
+                "props": [
+                  {
+                    "name": "hipaa-control-id",
+                    "value": "164.312(a)(2)(iv)"
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "hipaa-164-312-a-2-iv_smt.a",
+                    "uuid": "a66476d6-539b-43cf-aaf0-6a3753ff7c83",
+                    "description": "The uploads bucket and DynamoDB submissions table are encrypted with the Acme Health customer-managed KMS key, which has key rotation enabled.",
+                    "props": [
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_kms_key.grc"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_s3_bucket_server_side_encryption_configuration.uploads"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_dynamodb_table.intake"
+                      },
+                      {
+                        "name": "aws-arn",
+                        "value": "arn:aws:kms:us-east-1:771469181384:key/16799b9c-2e43-4fa9-acde-5f70aa4f9c9f"
+                      }
+                    ],
+                    "links": [
+                      {
+                        "href": "#2ad27521-e4b4-4171-855f-d3c9e358f9c5",
+                        "rel": "evidence"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "9c3dd720-6585-4e62-8725-cbefafd53701",
+                "control-id": "hipaa-164-312-e-1",
+                "description": "Transmission security for PHI paths.",
+                "props": [
+                  {
+                    "name": "hipaa-control-id",
+                    "value": "164.312(e)(1)"
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "hipaa-164-312-e-1_smt.a",
+                    "uuid": "56015913-86bb-46fb-ab31-6d4f556e219e",
+                    "description": "The uploads bucket denies non-TLS requests, and the intake Lambda runs in the starter VPC private subnets with S3 and DynamoDB VPC endpoints for AWS service traffic.",
+                    "props": [
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_s3_bucket_policy.uploads"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_lambda_function.intake"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_vpc_endpoint.s3"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_vpc_endpoint.dynamodb"
+                      }
+                    ],
+                    "links": [
+                      {
+                        "href": "#2ad27521-e4b4-4171-855f-d3c9e358f9c5",
+                        "rel": "evidence"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "cc6cb4b2-6cd7-42a0-bc80-1f9a436be485",
+                "control-id": "hipaa-164-308-a-7",
+                "description": "Contingency planning support for recoverability of PHI data.",
+                "props": [
+                  {
+                    "name": "hipaa-control-id",
+                    "value": "164.308(a)(7)"
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "hipaa-164-308-a-7_smt.a",
+                    "uuid": "7ea102fb-669a-4b18-b326-162aad7fc772",
+                    "description": "The uploads bucket has versioning enabled, and the DynamoDB table has point-in-time recovery enabled to support recovery from accidental overwrite or deletion.",
+                    "props": [
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_s3_bucket_versioning.uploads"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_dynamodb_table.intake"
+                      }
+                    ],
+                    "links": [
+                      {
+                        "href": "#2ad27521-e4b4-4171-855f-d3c9e358f9c5",
+                        "rel": "evidence"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "0b3e8b62-9df1-4da8-8d0d-0a7134cdff56",
+                "control-id": "hipaa-164-312-a-1",
+                "description": "Access control through least-privilege workload permissions.",
+                "props": [
+                  {
+                    "name": "hipaa-control-id",
+                    "value": "164.312(a)(1)"
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "hipaa-164-312-a-1_smt.a",
+                    "uuid": "8a609bea-65e7-4b07-b9ff-6dbcaf060dbf",
+                    "description": "The intake Lambda role grants only required DynamoDB, S3 object, KMS, SQS, and X-Ray actions; the original wildcard dynamodb:* and s3:* permissions are removed.",
+                    "props": [
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_iam_role_policy.lambda_inline"
+                      },
+                      {
+                        "name": "rego-policy",
+                        "value": "policies/lambda_iam_least_privilege.rego"
+                      }
+                    ],
+                    "links": [
+                      {
+                        "href": "#2ad27521-e4b4-4171-855f-d3c9e358f9c5",
+                        "rel": "evidence"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "fdf86b66-97fd-4a3f-9e8b-bad0539dbf21",
+                "control-id": "hipaa-164-312-b",
+                "description": "Audit controls for systems that create, receive, maintain, or transmit electronic PHI.",
+                "props": [
+                  {
+                    "name": "hipaa-control-id",
+                    "value": "164.312(b)"
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "hipaa-164-312-b_smt.a",
+                    "uuid": "a8429f65-c305-4b0e-9eaf-a42c5cc32e7e",
+                    "description": "API Gateway access logs are written to CloudWatch Logs, and a multi-region CloudTrail with log-file validation records AWS management events to a dedicated trail bucket.",
+                    "props": [
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_apigatewayv2_stage.default"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_cloudwatch_log_group.api_access"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_cloudtrail.management"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_s3_bucket.cloudtrail"
+                      }
+                    ],
+                    "links": [
+                      {
+                        "href": "#2ad27521-e4b4-4171-855f-d3c9e358f9c5",
+                        "rel": "evidence"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "uuid": "17ebe7e3-12f7-4232-bf08-cb5b99930ad4",
+                "control-id": "hipaa-164-312-c-1",
+                "description": "Integrity controls for audit evidence.",
+                "props": [
+                  {
+                    "name": "hipaa-control-id",
+                    "value": "164.312(c)(1)"
+                  }
+                ],
+                "statements": [
+                  {
+                    "statement-id": "hipaa-164-312-c-1_smt.a",
+                    "uuid": "0e7efd26-5a3e-4ea4-82fe-f562d3190961",
+                    "description": "Pipeline evidence is bundled, hashed, signed with keyless Cosign, and uploaded to an S3 evidence vault with Object Lock GOVERNANCE retention, versioning, and KMS encryption.",
+                    "props": [
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_s3_bucket.evidence"
+                      },
+                      {
+                        "name": "terraform-address",
+                        "value": "aws_s3_bucket_object_lock_configuration.evidence"
+                      },
+                      {
+                        "name": "workflow",
+                        "value": ".github/workflows/grc-gate.yml"
+                      },
+                      {
+                        "name": "aws-s3-bucket",
+                        "value": "acme-health-intake-evidence-788484bb"
+                      }
+                    ],
+                    "links": [
+                      {
+                        "href": "#b22a3df0-1e13-404e-b287-93af7e926d51",
+                        "rel": "evidence"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "back-matter": {
+      "resources": [
+        {
+          "uuid": "2ad27521-e4b4-4171-855f-d3c9e358f9c5",
+          "title": "Layer 1 Terraform plan evidence",
+          "rlinks": [
+            {
+              "href": "s3://acme-health-intake-evidence-788484bb/evidence/${GITHUB_SHA}/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}/evidence-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.tar.gz"
+            }
+          ]
+        },
+        {
+          "uuid": "b22a3df0-1e13-404e-b287-93af7e926d51",
+          "title": "Evidence vault",
+          "rlinks": [
+            {
+              "href": "s3://acme-health-intake-evidence-788484bb/"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
