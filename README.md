@@ -30,14 +30,14 @@ rm -f terraform/tfplan terraform/plan.json
 Set this repository secret before running the workflow on GitHub:
 
 ```text
-AWS_ROLE_TO_ASSUME=arn:aws:iam::771469181384:role/acme-health-intake-github-actions-788484bb
+AWS_ROLE_TO_ASSUME=<github-actions-role-arn>
 ```
 
 ## Key Outputs
 
 ```text
-API URL: https://hy7lfpmvgc.execute-api.us-east-1.amazonaws.com/intake
-Evidence bucket: acme-health-intake-evidence-788484bb
-CloudTrail bucket: acme-health-intake-cloudtrail-788484bb
-KMS key: arn:aws:kms:us-east-1:771469181384:key/16799b9c-2e43-4fa9-acde-5f70aa4f9c9f
+API URL: produced by terraform output api_url
+Evidence bucket: produced by terraform output evidence_bucket
+CloudTrail bucket: produced by terraform output cloudtrail_bucket
+KMS key: produced by terraform output kms_key_arn
 ```
