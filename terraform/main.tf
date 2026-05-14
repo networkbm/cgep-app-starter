@@ -8,6 +8,14 @@
 
 terraform {
   required_version = ">= 1.6"
+  backend "s3" {
+    bucket     = "acme-health-intake-evidence-788484bb"
+    key        = "terraform/acme-health-intake.tfstate"
+    region     = "us-east-1"
+    encrypt    = true
+    kms_key_id = "arn:aws:kms:us-east-1:771469181384:key/16799b9c-2e43-4fa9-acde-5f70aa4f9c9f"
+  }
+
   required_providers {
     aws     = { source = "hashicorp/aws", version = "~> 5.0" }
     random  = { source = "hashicorp/random", version = "~> 3.6" }
