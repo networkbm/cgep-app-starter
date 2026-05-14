@@ -20,9 +20,9 @@ eval "$(aws configure export-credentials --profile sandbox --format env)"
 terraform -chdir=terraform plan -out=tfplan
 terraform -chdir=terraform show -json tfplan > terraform/plan.json
 scripts/policy-gate.sh terraform/plan.json policies
-/Users/brianmontiel/Library/Python/3.10/bin/trestle validate -t component-definition -n acme-health-intake-component
-/Users/brianmontiel/Library/Python/3.10/bin/trestle validate -t profile -n hipaa-security-rule-profile
-rm terraform/tfplan terraform/plan.json
+trestle validate -t component-definition -n acme-health-intake-component
+trestle validate -t profile -n hipaa-security-rule-profile
+rm -f terraform/tfplan terraform/plan.json
 ```
 
 ## GitHub Secret
