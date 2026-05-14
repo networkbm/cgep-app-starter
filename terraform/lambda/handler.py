@@ -7,8 +7,8 @@ Accepts POST /intake with JSON body:
 Writes the submission to DynamoDB and (optionally) uploads any attached
 file content to S3. Returns 200 with the new submission ID.
 
-Deliberately minimal. The capstone learner is expected to catch and remediate
-the GRC gaps listed in GAPS.md, not the application code.
+The application stays intentionally small so the capstone work can focus on
+the infrastructure, policy, evidence, and OSCAL layers around it.
 """
 
 import json

@@ -1,0 +1,31 @@
+{
+  "profile": {
+    "uuid": "2176fba6-5d09-4b3e-adea-a288f42a4148",
+    "metadata": {
+      "title": "Acme Health HIPAA Security Rule Profile",
+      "last-modified": "2026-05-14T00:55:04+00:00",
+      "version": "0.1.0",
+      "oscal-version": "1.1.2"
+    },
+    "imports": [
+      {
+        "href": "https://csrc.nist.gov/publications/detail/sp/800-66/rev-2/final",
+        "include-controls": [
+          {
+            "with-ids": [
+              "hipaa-164-308-a-7",
+              "hipaa-164-312-a-1",
+              "hipaa-164-312-a-2-iv",
+              "hipaa-164-312-b",
+              "hipaa-164-312-c-1",
+              "hipaa-164-312-e-1"
+            ]
+          }
+        ]
+      }
+    ],
+    "merge": {
+      "as-is": true
+    }
+  }
+}
